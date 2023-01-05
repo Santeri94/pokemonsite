@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import './App.css';
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
@@ -20,15 +21,25 @@ const style = {
 const DisplayPokemon = (props) => {
   if (!props.pokemon || !props.pokemon.sprites){
     return (
-      <p className="search-message">Please search for pokemon</p>
+      null
     )
   }
   else
   return (
-    <img src={props.pokemon.sprites.front_default} className="pokemon-img" onClick={() => props.setStatus(true)} />
+    <img alt="" src={props.pokemon.sprites.front_default} className="pokemon-img" onClick={() => props.setStatus(true)} />
   )
 }
 
+
+const DisplayAbilities = (props) => {
+  return (
+    <div>
+      {props.pokemon.abilities.map((ability) => {
+        return <div key={ability.ability.name}>{ability.ability.name}</div>
+      })}
+    </div>
+  )
+}
 
 function App() {
   const [pokemon, setPokemon] = useState({})
@@ -36,21 +47,19 @@ function App() {
   const [status, setStatus] = useState(false)
 
   const fetchData = () => {
-    fetch('https://pokeapi.co/api/v2/pokemon/' + userInput,{method:'GET'})
-    .then(response => response.json())
-    .then((resData) => {
-      if (resData){
-        console.log(resData);
-        setPokemon(resData)
-      }
-      else {
-        setPokemon({})
-      }
-    })
-    .catch(() => {
-      setPokemon({});
-    });
-  }
+    axios.get('https://pokeapi.co/api/v2/pokemon/' + userInput)
+      .then(response => {
+        if (response.data) {
+          console.log(response.data);
+          setPokemon(response.data);
+        } else {
+          setPokemon({});
+        }
+      })
+      .catch(() => {
+        setPokemon({});
+      });
+  };
   
 
   const inputChanged = (event) => {
@@ -81,15 +90,19 @@ function App() {
               {pokemon.name}
             </Typography>
             <div>
-            {pokemon.types && pokemon.types[0] ? (
+            {pokemon.types && pokemon.types[0] && pokemon.types[1] ? (
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {pokemon.types[0].type.name}
+            <b>ID:</b> {pokemon.id} <br/>
+            <b>Type:</b> {pokemon.types[0].type.name}/{pokemon.types[1].type.name} <br/>
+            <b>Abilities:</b> <DisplayAbilities pokemon={pokemon}/>  
           </Typography>
         ) : null}
-            {pokemon.types && pokemon.types[1] ? (
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {pokemon.types[1].type.name}
-          </Typography>
+            {pokemon.types && pokemon.types[0] && !pokemon.types[1] ? (
+           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+           <b>ID:</b> {pokemon.id} <br/>
+           <b>Type:</b> {pokemon.types[0].type.name}<br/>
+           <b>Abilities:</b> <DisplayAbilities pokemon={pokemon}/>  
+         </Typography>
         ) : null}
         </div>
           </Box>
@@ -100,4 +113,5 @@ function App() {
 
 }
 
+// {pokemon.abilities[0].ability.name} tää on se pathi yhelle abilitylle
 export default App;
