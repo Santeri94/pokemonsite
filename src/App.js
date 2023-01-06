@@ -5,6 +5,10 @@ import {DisplayPokemon, DisplayAbilities} from './DisplayComponents'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+
 
 // Modal style
 const style = {
@@ -39,10 +43,46 @@ function App() {
         setPokemon({});
       });
   };
+
+  const nextPokemon = () => {
+    const newId = pokemon.id + 1
+    setUserInput(newId);
+    axios.get(`https://pokeapi.co/api/v2/pokemon/${newId}`)
+      .then(response => {
+        if (response.data) {
+          console.log(response.data)
+          setPokemon(response.data)
+        } else {
+          setPokemon({})
+        }
+      })
+      .catch(() => {
+        setPokemon({})
+      })
+  }
+
+  const previousPokemon = () => {
+    const newId = pokemon.id + -1
+    setUserInput(newId);
+    axios.get(`https://pokeapi.co/api/v2/pokemon/${newId}`)
+      .then(response => {
+        if (response.data) {
+          console.log(response.data)
+          setPokemon(response.data)
+        } else {
+          setPokemon({})
+        }
+      })
+      .catch(() => {
+        setPokemon({})
+      })
+  }
+
+
   
 
   const inputChanged = (event) => {
-    setUserInput(event.target.value);
+    setUserInput(event.target.value)
   }
 
 
@@ -50,19 +90,34 @@ function App() {
   return (
     <div>
       <div>
+      <AppBar style={{ background:'#e4000f' }}>
+        <Toolbar>
+          <Typography variant="h5">
+            Pokemon application
+          </Typography>
+        </Toolbar>
+      </AppBar> 
         <input
           className="search-bar"
-          placeholder="Search"
+          placeholder="Search Pokemon"
           name="search"
           value={userInput}
           onChange={inputChanged}
         />
-        <button className="search-button" onClick={fetchData}>
+        <Button variant="contained" size="large" style={{position: 'absolute', top: '50%', left: '45%', transform: 'translate(-50%, -50%)', backgroundColor: '#e4000f'}} onClick={fetchData}>
           Search
-        </button>
+        </Button>
       </div>
       <div>
         <DisplayPokemon pokemon={pokemon} setStatus={setStatus} />
+        {pokemon && pokemon.sprites ? (
+        <Button variant="contained" size="large" style={{position: 'absolute', top: '25%', left: '60%', transform: 'translate(-50%, -50%)', backgroundColor: '#e4000f'}} onClick={nextPokemon}>
+          Next
+        </Button>) : null }
+        {pokemon && pokemon.sprites ? (
+        <Button variant="contained" size="large" style={{position: 'absolute', top: '25%', left: '35%', transform: 'translate(-50%, -50%)', backgroundColor: '#e4000f'}} onClick={previousPokemon}>
+          Previous
+        </Button>) : null }
         <Modal open={status} onClose={() => setStatus(false)}>
           <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -92,5 +147,4 @@ function App() {
 
 }
 
-// {pokemon.abilities[0].ability.name} tää on se pathi yhelle abilitylle
 export default App;
