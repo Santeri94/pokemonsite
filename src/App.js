@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
-import axios from 'axios';
-import './App.css';
+import axios from 'axios'
+import './App.css'
+import {DisplayPokemon, DisplayAbilities} from './DisplayComponents'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 
+// Modal style
 const style = {
   position: 'absolute',
   top: '50%',
@@ -17,29 +19,6 @@ const style = {
   p: 4
 }
 
-
-const DisplayPokemon = (props) => {
-  if (!props.pokemon || !props.pokemon.sprites){
-    return (
-      null
-    )
-  }
-  else
-  return (
-    <img alt="" src={props.pokemon.sprites.front_default} className="pokemon-img" onClick={() => props.setStatus(true)} />
-  )
-}
-
-
-const DisplayAbilities = (props) => {
-  return (
-    <div>
-      {props.pokemon.abilities.map((ability) => {
-        return <div key={ability.ability.name}>{ability.ability.name}</div>
-      })}
-    </div>
-  )
-}
 
 function App() {
   const [pokemon, setPokemon] = useState({})
@@ -91,17 +70,17 @@ function App() {
             </Typography>
             <div>
             {pokemon.types && pokemon.types[0] && pokemon.types[1] ? (
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <Typography component={'span'} id="modal-modal-description" sx={{ mt: 2 }}>
             <b>ID:</b> {pokemon.id} <br/>
             <b>Type:</b> {pokemon.types[0].type.name}/{pokemon.types[1].type.name} <br/>
-            <b>Abilities:</b> <DisplayAbilities pokemon={pokemon}/>  
+            <DisplayAbilities pokemon={pokemon}/>  
           </Typography>
         ) : null}
             {pokemon.types && pokemon.types[0] && !pokemon.types[1] ? (
-           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+           <Typography component={'span'} id="modal-modal-description" sx={{ mt: 2 }}>
            <b>ID:</b> {pokemon.id} <br/>
            <b>Type:</b> {pokemon.types[0].type.name}<br/>
-           <b>Abilities:</b> <DisplayAbilities pokemon={pokemon}/>  
+           <DisplayAbilities pokemon={pokemon}/>  
          </Typography>
         ) : null}
         </div>
