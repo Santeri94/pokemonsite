@@ -1,7 +1,7 @@
 {
   "name": "pokemonsite",
   "version": "0.1.0",
-  "homepage": "https://Santeri94.github.io/react-gh-pages",
+  "homepage": "https://Santeri94.github.io/pokemonsite",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.5",
