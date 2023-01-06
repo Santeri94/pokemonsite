@@ -1,5 +1,3 @@
-
-
 const DisplayPokemon = (props) => {
     if (!props.pokemon || !props.pokemon.sprites){
       return (
