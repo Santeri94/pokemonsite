@@ -1,0 +1,21 @@
+
+.search-bar {
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  width: 280px;
+  height: 26px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.pokemon-img {
+  position: absolute;
+  top: 10%;
+  left: 40%;
+  width: 300px;
+  height: 300px;
+}
